@@ -7,7 +7,9 @@ import requests
 @pytest.mark.parametrize(
     ["text", "expected_sentiment"],
     [
-        ("I'm excited to get started.", "positive"),
+        ("I'm excited to get started.", "negative"),
+        ("I'm nervous to get started.", "negative"),
+        ("I'm anxious to get started.", "negative"),
     ],
 )
 def test_create_analysis(text, expected_sentiment):
