@@ -7,6 +7,7 @@ on:
       - '**/README.md'
 env:
   ENVIRONMENT: stg
+  PORT: 8000
 
 jobs:
   unit-and-coverage-tests:
@@ -53,7 +54,6 @@ jobs:
         run: |
           SHORT_SHA=`git rev-parse --short HEAD`
           IMAGE_TAG_APP=sentinel-${SHORT_SHA}
-          PORT=8000
 
           docker build -t $IMAGE_TAG_APP .
           mkdir -p docker-artifact
@@ -68,5 +68,8 @@ jobs:
 
       - name: Run integration tests
         run: |
+          until [ "`docker inspect -f {{.State.Running}} ${IMAGE_TAG_APP}`"=="true" ]; do
+              sleep 1;
+          done;
           export BASE_URL=http://127.0.0.1:$PORT
           poetry run pytest tests/test_regression.py
