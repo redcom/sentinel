@@ -14,14 +14,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.3
-      - name: Cache python dependencies
-        uses: actions/cache@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          path: ~/.cache
-          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry
+          python-version: '3.10.2'
+          cache: 'poetry'
+      - name: Cache python dependencies
       - name: Install requirements
         run: |
           pip install -U poetry
