@@ -63,10 +63,12 @@ jobs:
               -d \
               $IMAGE_TAG_APP
 
-      - name: Run integration tests
+      - name: Run regression tests
         run: |
-          sleep 1
-          nc -z 127.0.0.1 8000
-          ls -al docker-artifact
           export BASE_URL=http://127.0.0.1:$PORT
           poetry run pytest tests/test_regression.py
+
+      - name: Run integration tests
+        run: |
+          export BASE_URL=http://127.0.0.1:$PORT
+          poetry run pytest tests/test_integration.py
