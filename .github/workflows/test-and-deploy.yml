@@ -8,7 +8,7 @@ on:
 env:
   ENVIRONMENT: stg
   PORT: 8000
-  IMAGE_TAG_APP: "sentinel-${GITHUB_SHA}"
+  IMAGE_TAG_APP: sentinel
 
 jobs:
   unit-and-coverage-tests:
@@ -52,6 +52,7 @@ jobs:
       - name: Build and tag docker image
         id: "build-image"
         run: |
+          IMAGE_TAG_APP="$IMAGE_TAG_APP-$GITHUB_SHA"
           docker build -t $IMAGE_TAG_APP .
           mkdir -p docker-artifact
           docker tag $IMAGE_TAG_APP current
@@ -65,6 +66,7 @@ jobs:
 
       - name: Run integration tests
         run: |
+          IMAGE_TAG_APP="$IMAGE_TAG_APP-$GITHUB_SHA"
           until [ "`docker inspect -f {{.State.Running}} $IMAGE_TAG_APP`"=="true" ]; do
               sleep 1;
           done;
