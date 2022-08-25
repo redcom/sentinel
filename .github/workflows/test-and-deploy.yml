@@ -8,7 +8,7 @@ on:
 env:
   ENVIRONMENT: stg
   PORT: 8000
-  IMAGE_TAG_APP: sentinel-$GITHUB_SHA
+  IMAGE_TAG_APP: "sentinel-${GITHUB_SHA}"
 
 jobs:
   unit-and-coverage-tests:
