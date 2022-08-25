@@ -62,8 +62,8 @@ jobs:
 
           docker run \
               --env PORT=$PORT \
-              -p $PORT:$PORT
-              -d
+              -p $PORT:$PORT \
+              -d \
               $IMAGE_TAG_APP
 
       - name: Run integration tests
