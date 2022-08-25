@@ -15,11 +15,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Install and cache python dependencies
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10.2'
           cache: 'poetry'
-      - name: Cache python dependencies
       - name: Install requirements
         run: |
           pip install -U poetry
