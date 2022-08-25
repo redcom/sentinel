@@ -8,6 +8,7 @@ on:
 env:
   ENVIRONMENT: stg
   PORT: 8000
+  IMAGE_TAG_APP: sentinel-$GITHUB_SHA
 
 jobs:
   unit-and-coverage-tests:
@@ -34,7 +35,6 @@ jobs:
       - name: Run unit tests and coverage
         run: |
             # hint that we run the tests on CI system
-            export CI=true
             poetry run coverage run -m pytest tests/test_unit.py
             poetry run coverage report --fail-under 90
 
@@ -52,9 +52,6 @@ jobs:
       - name: Build and tag docker image
         id: "build-image"
         run: |
-          SHORT_SHA=`git rev-parse --short HEAD`
-          IMAGE_TAG_APP=sentinel-${SHORT_SHA}
-
           docker build -t $IMAGE_TAG_APP .
           mkdir -p docker-artifact
           docker tag $IMAGE_TAG_APP current
@@ -68,7 +65,7 @@ jobs:
 
       - name: Run integration tests
         run: |
-          until [ "`docker inspect -f {{.State.Running}} ${IMAGE_TAG_APP}`"=="true" ]; do
+          until [ "`docker inspect -f {{.State.Running}} $IMAGE_TAG_APP`"=="true" ]; do
               sleep 1;
           done;
           export BASE_URL=http://127.0.0.1:$PORT
